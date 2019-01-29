@@ -75,8 +75,8 @@ export default {
             mapView: null,
             medico: true,
             currentGeoLocation: {
-                latitude: null,
-                longitude: null,
+                latitude: null, //-33.416488,
+                longitude: null, //-70.600672,
                 altitude: null,
                 direction: null
             },
@@ -85,32 +85,110 @@ export default {
 	},
 	methods: {
 		mapReady(args) {
-			this.mapView = args.object
+            this.mapView = args.object
+            // Descripción del marcador
 			this.mapView.infoWindowTemplate = `
 				<StackLayout orientation="vertical" width="200">
 					<Label text="{{title}}" className="title" />
 					<!-- <Label text="{{snippet}}" textWrep="true" class="snippet" /> -->
 				</StackLayout>
-			`
-            const marcadorUsuario = new Marker()
-            // Ubicación del usuario
-            marcadorUsuario.position = Position.positionFromLatLng(this.currentGeoLocation.latitude, this.currentGeoLocation.longitude)
-			marcadorUsuario.title = 'Tú ubicación'
-			marcadorUsuario.snippet = 'Test snippet'
-            marcadorUsuario.userData = {test: 'Test user data'}
-            
-            http.getImage("https://i.imgur.com/MfZJcgY.png")
+            `
+
+            /*
+            >   Nomenclatura marcadores
+            >   U: Ubicación, C: Clínica o Centro médico, M: Médico.
+            */
+
+           // Imagenes
+           const imgUsuario = 'https://i.imgur.com/MfZJcgY.png'
+           const imgClinica = 'https://i.imgur.com/qJxXVMb.png'
+           const imgMedico = 'https://i.imgur.com/7ebmvQD.png'
+
+            // Marcador: Ubicación del usuario
+            const UUsuario = new Marker()
+            // Tobalaba con Apoquindo
+            UUsuario.position = Position.positionFromLatLng(this.currentGeoLocation.latitude, this.currentGeoLocation.longitude)
+                //(-33.416689, -70.600269)
+            UUsuario.title = 'Tú ubicación'
+			//UUsuario.snippet = 'Test snippet'
+            UUsuario.userData = { test: 'Test user data' }
+            //UUsuario.color = 'green'
+
+            http.getImage(imgUsuario)
             .then(result => {
                 let icon = new Image()
                 icon.imageSource = result
-                marcadorUsuario.icon = icon
+                UUsuario.icon = icon
             }, error => {
                 console.log(error)
             })
 
-            //marcadorUsuario.color = 'green'
+            this.mapView.addMarker(UUsuario)
 
-			this.mapView.addMarker(marcadorUsuario)
+            // Marcador: Clínica Vida Integra El Bosque
+            const CVidaIntegraElBosque = new Marker()
+            CVidaIntegraElBosque.position = Position.positionFromLatLng(-33.416488, -70.600672)
+            CVidaIntegraElBosque.title = 'Clínica Vida Integra El Bosque'
+
+            http.getImage(imgClinica)
+            .then(result => {
+                let icon = new Image()
+                icon.imageSource = result
+                CVidaIntegraElBosque.icon = icon
+            }, error => {
+                console.log(error)
+            })
+
+            this.mapView.addMarker(CVidaIntegraElBosque)
+
+            // Marcador: Médico Juan Pérez
+            const MJuanPerez = new Marker()
+            MJuanPerez.position = Position.positionFromLatLng(-33.413892, -70.598350)
+            MJuanPerez.title = 'Médico Juan Pérez'
+
+            http.getImage(imgMedico)
+            .then(result => {
+                let icon = new Image()
+                icon.imageSource = result
+                MJuanPerez.icon = icon
+            }, error => {
+                console.log(error)
+            })
+
+            this.mapView.addMarker(MJuanPerez)
+
+            // Marcador: Médico Leonardo Rojas
+            const MLeonardoRojas = new Marker()
+            MLeonardoRojas.position = Position.positionFromLatLng(-33.419675, -70.604420)
+            MLeonardoRojas.title = 'Médico Leonardo Rojas'
+
+            http.getImage(imgMedico)
+            .then(result => {
+                let icon = new Image()
+                icon.imageSource = result
+                MLeonardoRojas.icon = icon
+            }, error => {
+                console.log(error)
+            })
+
+            this.mapView.addMarker(MLeonardoRojas)
+
+            // Marcador: Clínica (Museo Interactivo Las Condes (MUI))
+            const CMuseo = new Marker()
+            CMuseo.position = Position.positionFromLatLng(-33.414396, -70.595387)
+            CMuseo.title = 'Museo Interactivo Las Condes (MUI)'
+
+            http.getImage(imgClinica)
+            .then(result => {
+                let icon = new Image()
+                icon.imageSource = result
+                CMuseo.icon = icon
+            }, error => {
+                console.log(error)
+            })
+
+            this.mapView.addMarker(CMuseo)
+
 		},
 		onMarkerSelect(args) {
 			console.log(args.marker.title)
@@ -193,6 +271,8 @@ export default {
     mounted() {
         //geoLocation.enableLocationRequest()
         //this.getLocation()
+        
+        // GPS
         this.enableLocationServices()
         this.showLocation()
     }

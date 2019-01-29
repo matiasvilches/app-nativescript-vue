@@ -11,9 +11,13 @@
                         <!-- Su ubicación es -->
                         <StackLayout class="input-field">
                             <Label text="Su ubicación es" class="label font-weight-bold m-b-5" />
-                            <Label class="input" v-model="ubicacion" />
+                            <Label class="input" v-model="locacion.ubicacion" />
                             <StackLayout class="hr-light" />
-                            <Label class="input"  text="lat long" />
+                            <StackLayout orientation="horizontal">
+                                <Label class="input" v-model="locacion.lat" />
+                                <Label class="input" v-model="locacion.lng" />
+                            </StackLayout>
+                            
                         </StackLayout>
 
                         <!-- Ud. está en -->
@@ -86,7 +90,11 @@ export default {
                 ],
                 medicoIndex: 0
             },
-            ubicacion: 'El Bosque....'
+            locacion: {
+                ubicacion: 'El Bosque....',
+                lat: '',
+                lng: ''
+            }
         }
     },
     methods: {
@@ -95,9 +103,8 @@ export default {
         }
     },
     mounted() {
-        /*
         fetch(
-            "https://maps.googleapis.com/maps/api/geocode/json?latlng=-33.525103,-70.759823&key=AIzaSyCsPtC7-9Na_bPaAFX3KYLksIkBSVUPSGI" +
+            "https://maps.googleapis.com/maps/api/geocode/json?latlng=-33.525103,-70.759823&key=AIzaSyCsPtC7-9Na_bPaAFX3KYLksIkBSVUPSGI" //+
                 //res.latitude + //latitud del componente mapa
                 //"," +
                 //res.longitude +
@@ -105,10 +112,12 @@ export default {
             )
         .then(response => response.json())
         .then(data => {
-            //this.ubicacion = data.results.formatted_address
-            console.log(data.results[0].formatted_address)
+            this.locacion.ubicacion = data.results[1].formatted_address
+            this.locacion.lat = data.results[2].geometry.location.lat
+            //console.log(data.results[2].geometry.location.lat)
+            this.locacion.lng = data.results[2].geometry.location.lng
+            //console.log(data.results[2].geometry.location.lng)
         })
-        */
     }
 }
 </script>
